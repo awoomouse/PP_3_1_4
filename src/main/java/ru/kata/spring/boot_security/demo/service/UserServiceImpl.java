@@ -1,21 +1,19 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.configs.MyPasswordEncoder;
-import ru.kata.spring.boot_security.demo.model.Role;
+import ru.kata.spring.boot_security.demo.config.MyPasswordEncoder;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final MyPasswordEncoder myPasswordEncoder;
@@ -49,8 +47,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void deleteUser(long id) {
+    public Boolean deleteUser(long id) {
         userRepository.deleteById(id);
+        return true;
     }
 
     @Transactional
@@ -65,5 +64,10 @@ public class UserServiceImpl implements UserService {
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 }

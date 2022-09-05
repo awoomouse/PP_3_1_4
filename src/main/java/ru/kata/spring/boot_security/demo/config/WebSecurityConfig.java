@@ -1,26 +1,24 @@
-package ru.kata.spring.boot_security.demo.configs;
+package ru.kata.spring.boot_security.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import ru.kata.spring.boot_security.demo.service.UserDetailsImpl;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
-    private final UserDetailsImpl userDetails;
+    private final UserServiceImpl userService;
     private final MyPasswordEncoder myPasswordEncoder;
 
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailsImpl userDetails, MyPasswordEncoder myPasswordEncoder) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserServiceImpl userService, MyPasswordEncoder myPasswordEncoder) {
         this.successUserHandler = successUserHandler;
-        this.userDetails = userDetails;
+        this.userService = userService;
         this.myPasswordEncoder = myPasswordEncoder;
     }
 
@@ -31,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().and()
                 .authorizeRequests()
                 .antMatchers("/user", "/api/user")
-                .hasRole("USER")
+                .hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**", "/api/**")
                 .hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -45,6 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetails).passwordEncoder(myPasswordEncoder.getPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(myPasswordEncoder.getPasswordEncoder());
     }
 }
