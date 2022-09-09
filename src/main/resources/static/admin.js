@@ -39,11 +39,9 @@ const updateUser = (user) => {
     const foundIndex = users.findIndex(x => x.id === user.id);
     users[foundIndex] = user;
     renderUsers(users);
-    console.log(users);
 }
 const removeUser = (id) => {
     users = users.filter(user => user.id !== id);
-    console.log(users)
     renderUsers(users);
 }
 
@@ -65,7 +63,6 @@ const addAge = document.getElementById('addAge')
 const addEmail = document.getElementById('addEmail')
 const addPassword = document.getElementById('addPassword')
 const addRoles = document.getElementById('addRoles')
-console.log(addRoles)
 
 addUserForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -204,3 +201,20 @@ on(document, 'click', '#delete-user', e => {
 
     $("#modalDelete").modal("show")
 })
+
+const userUrl = 'http://localhost:8080/api/user'
+let loggedInUser = document.querySelector('#User')
+
+fetch(userUrl)
+    .then(res => res.json())
+    .then(data => {
+        loggedInUser.innerHTML = `
+                    <td>${data.id}</td> 
+                    <td>${data.username}</td> 
+                    <td>${data.firstName}</td> 
+                    <td>${data.lastName}</td>                    
+                    <td>${data.age}</td> 
+                    <td>${data.email}</td>                   
+                    <td>${data.roles.map(role => role.roleName === 'ROLE_USER' ? 'USER' : 'ADMIN')}</td> 
+                                `;
+    })

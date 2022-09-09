@@ -8,7 +8,7 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark" id="adminhttml">
         <div class="container-fluid">
             <p class="navbar-brand text-white">
                 <b><span class="alight-middle" th:text="${user.username}"></span></b>
@@ -31,9 +31,9 @@
                 <ul class="nav nav-pills flex-column">
                     <br/>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/admin" sec:authorize="hasAuthority('ROLE_ADMIN')"
+                        <a class="nav-link active" href="#adminhttml" sec:authorize="hasAuthority('ROLE_ADMIN')"
                            aria-controls="v-pills-home" aria-selected="true">Admin</a>
-                        <a class="nav-link" href="/user" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"
+                        <a class="nav-link" href="#userhttml" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"
                            role="tab"
                            aria-controls="v-pills-profile" aria-selected="false">User</a>
                     </li>
@@ -151,7 +151,8 @@
                                             <select multiple class="custom-select w-100"
                                                     size="2"
                                                     id="editRoles"
-                                                    name="nameRoles">
+                                                    name="nameRoles"
+                                                    required>
                                                 <option th:each="role:${roleList}"
                                                         th:value="${role.roleName}"
                                                         th:selected="${user.roles.contains(role)}">
@@ -301,7 +302,7 @@
 
                                                 <strong><label for="addRoles">Role</label></strong>
                                                 <select multiple class="custom-select w-100"
-                                                    size="2" id="addRoles" name="nameRoles">
+                                                    size="2" id="addRoles" name="nameRoles" required>
                                                     <option th:each="role:${roleList}"
                                                             th:value="${role.roleName}">
                                                         <th:block th:text="${role.roleName.replaceFirst('ROLE_', '')}"></th:block>
@@ -322,8 +323,85 @@
             </div>
         </div>
     </div>
+    <!--  страница юзера   -->
+    <nav class="navbar navbar-dark bg-dark"  id="userhttml">
+        <div class="container-fluid">
+            <p class="navbar-brand text-white">
+                <b><span class="alight-middle" th:text="${user.username}"></span></b>
+                <span class="alight-middle">with roles:</span>
+                <span class="alight-middle"
+                      th:each="role : ${user.getRoles()}"
+                      th:if="${role.roleName.startsWith('ROLE_')}"
+                      th:text="${role.roleName.replaceFirst('ROLE_', ' ')}">role</span>
+            </p>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-dark text-secondary">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container-fluid bg-light">
+        <div class="row">
+
+            <div class="col-lg-2 bg-white min-vh-100">
+                <ul class="nav nav-pills flex-column">
+                    <br/>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#adminhttml" sec:authorize="hasRole('ADMIN')"
+                           aria-controls="v-pills-home" aria-selected="false">Admin</a>
+                        <a class="nav-link active" href="#userhttml" sec:authorize="(hasAnyRole('ADMIN','USER'))"
+                           role="tab"
+                           aria-controls="v-pills-profile" aria-selected="true">User</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-10 bg-light">
+                <br>
+                <h1>User information page</h1>
+
+
+                <div class="w-100"></div>
+                <div class="col border bg-white">
+                    <br/>
+
+                    <div class="tab-content">
+                        <div class="tab-pane table-striped container-fluid active">
+                            <div class="row">
+                                <div class="col border bg-light">
+                                    <p><h5>User info</h5>
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col border bg-white">
+                                    <br/>
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Username</th>
+                                            <th>FirstName</th>
+                                            <th>LastName</th>
+                                            <th>Age</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="User">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 <script type="text/javascript" src="admin.js"></script>
+<script type="text/javascript" src="user.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

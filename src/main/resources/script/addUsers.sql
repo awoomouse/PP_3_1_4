@@ -16,3 +16,6 @@ INSERT INTO users_roles(user_id, role_id)
         (3, 1),
         (3, 2);
 
+-- login admin, password admin;
+-- login user, password user;
+-- login admusr, password admusr
