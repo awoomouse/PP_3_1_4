@@ -8,7 +8,7 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark" id="adminhttml">
+    <nav class="navbar navbar-dark bg-dark" id="adminpage">
         <div class="container-fluid">
             <p class="navbar-brand text-white">
                 <b><span class="alight-middle" th:text="${user.username}"></span></b>
@@ -31,9 +31,9 @@
                 <ul class="nav nav-pills flex-column">
                     <br/>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#adminhttml" sec:authorize="hasAuthority('ROLE_ADMIN')"
+                        <a class="nav-link active" href="#adminpage" sec:authorize="hasAuthority('ROLE_ADMIN')"
                            aria-controls="v-pills-home" aria-selected="true">Admin</a>
-                        <a class="nav-link" href="#userhttml" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"
+                        <a class="nav-link" href="#userpage" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"
                            role="tab"
                            aria-controls="v-pills-profile" aria-selected="false">User</a>
                     </li>
@@ -324,7 +324,7 @@
         </div>
     </div>
     <!--  страница юзера   -->
-    <nav class="navbar navbar-dark bg-dark"  id="userhttml">
+    <nav class="navbar navbar-dark bg-dark"  id="userpage">
         <div class="container-fluid">
             <p class="navbar-brand text-white">
                 <b><span class="alight-middle" th:text="${user.username}"></span></b>
@@ -346,9 +346,9 @@
                 <ul class="nav nav-pills flex-column">
                     <br/>
                     <li class="nav-item">
-                        <a class="nav-link" href="#adminhttml" sec:authorize="hasRole('ADMIN')"
+                        <a class="nav-link" href="#adminpage" sec:authorize="hasRole('ADMIN')"
                            aria-controls="v-pills-home" aria-selected="false">Admin</a>
-                        <a class="nav-link active" href="#userhttml" sec:authorize="(hasAnyRole('ADMIN','USER'))"
+                        <a class="nav-link active" href="#userpage" sec:authorize="(hasAnyRole('ADMIN','USER'))"
                            role="tab"
                            aria-controls="v-pills-profile" aria-selected="true">User</a>
                     </li>

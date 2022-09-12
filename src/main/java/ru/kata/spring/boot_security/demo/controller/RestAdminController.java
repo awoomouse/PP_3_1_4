@@ -25,9 +25,9 @@ public class RestAdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/app")
     public ModelAndView getUsers(Principal principal) {
-        ModelAndView mav = new ModelAndView("admin");
+        ModelAndView mav = new ModelAndView("app");
         mav.addObject("user", userDao.getUserByName(principal.getName()));
         mav.addObject("usersList", userDao.getAllUsers());
         mav.addObject("roleList", roleService.getAllRoles());
@@ -39,21 +39,6 @@ public class RestAdminController {
         List<User> userList = userDao.getAllUsers();
         return userList != null && !userList.isEmpty()
                 ? new ResponseEntity<>(userList, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/user")
-    public ModelAndView user(Principal principal) {
-        ModelAndView mav = new ModelAndView("user");
-        mav.addObject("user", userDao.getUserByName(principal.getName()));
-        return mav;
-    }
-
-    @GetMapping("/api/user")
-    public ResponseEntity<User> getUser(Principal principal) {
-        User user = userDao.getUserByName(principal.getName());
-        return user != null
-                ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
