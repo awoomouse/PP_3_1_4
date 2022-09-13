@@ -23,7 +23,7 @@ public class RestUserController {
     }
 
     @GetMapping("/user")
-    public ModelAndView user(Principal principal) {
+    public ModelAndView getUserView(Principal principal) {
         ModelAndView mav = new ModelAndView("app");
         mav.addObject("user", userDao.getUserByName(principal.getName()));
         return mav;
